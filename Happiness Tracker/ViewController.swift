@@ -9,67 +9,56 @@ import UIKit
 import CoreData
 
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITextFieldDelegate {
 
+    @IBOutlet weak var happinessLbl: UILabel!
+    
+    @IBOutlet weak var happinessDescription: UITextField!
+    
+    @IBAction func slider(_ sender: UISlider) {
+        
+        happinessLbl.isHidden = false
+        
+        switch Int(sender.value) {
+        case 1:
+            happinessLbl.text = "😡"
+        case 2:
+            happinessLbl.text = "😪"
+        case 3:
+            happinessLbl.text = "😅"
+        case 4:
+            happinessLbl.text = "🙂"
+        case 5:
+            happinessLbl.text = "😌"
+        case 6:
+            happinessLbl.text = "😄"
+        case 7:
+            happinessLbl.text = "😁"
+        default:
+            happinessLbl.text = "🙂"
+        }
+        
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-
-        self.save(value: "Test1")
-        self.save(value: "Test2")
-        self.save(value: "Test3")
-
-        self.retrieveValues()
-        
+        happinessDescription.delegate = self
         // Do any additional setup after loading the view.
     }
     
-}
-
-extension ViewController {
-    func save(value: String) {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            let context = appDelegate.persistentContainer.viewContext
-            
-            guard let entityDescription = NSEntityDescription.entity(forEntityName: "TestEntity", in: context) else {return}
-            
-            let newValue = NSManagedObject(entity: entityDescription, insertInto: context)
-            
-            newValue.setValue(value, forKey: "testValue")
-            
-            do {
-                try context.save()
-                print("Saved: \(value)")
-            } catch {
-                print("Saving error")
-            }
-        }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+           textField.resignFirstResponder()
+           return true
+       }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
-    func retrieveValues() {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            let context = appDelegate.persistentContainer.viewContext
-
-            let fetchRequest = NSFetchRequest<TestEntity>(entityName: "TestEntity")
-            
-            do {
-                let results = try context.fetch(fetchRequest)
-                
-                for result in results {
-                    if let testValue = result.testValue {
-                        print(testValue)
-                    }
-                }
-            }
-            
-            catch {
-                print("failed")
-            }
-        }
-    }
-    
-    
 }
+
+
 
 
 /*   Label that will display the Date and it's function
