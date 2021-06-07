@@ -3,3 +3,5 @@ An iOS App idea I had that logs your happiness level, allows you to see when tho
 
 
 When downloading make sure ViewControllerB is in the main project.  
+
+Working great today
